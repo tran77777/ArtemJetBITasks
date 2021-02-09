@@ -1,6 +1,6 @@
 #### SAP Fiori Worklist Application Template ####
 
-This is your copy of the "SAP Fiori Worklist Application" template - ready for your custom developments!
+This is youra copy of the "SAP Fiori Worklist Application" template - ready for your custom developments!
 You can find the template version in your workspace in the manifest.json file under "sourceTemplate".
 
 
