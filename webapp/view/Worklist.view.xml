@@ -1,0 +1,61 @@
+<mvc:View controllerName="jet.MyFirstProject.controller.Worklist" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic">
+	<semantic:SemanticPage id="page" headerPinnable="false" toggleHeaderOnTitleClick="false">
+		<semantic:titleHeading>
+			<Title text="{i18n>worklistTitle}" level="H2"/>
+		</semantic:titleHeading>
+		<semantic:content>
+			<Table id="table" mode="MultiSelect" width="auto"
+				items="{ path: '/zjblessons_base_Materials', sorter: { path: 'CreatedBy', descending: false, group : true } }"
+				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingThreshold="20"
+				updateFinished=".onUpdateFinished">
+				<headerToolbar>
+					<OverflowToolbar>
+						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
+						<ToolbarSpacer/>
+						<SearchField id="searchFieldMaterialText" tooltip="{i18n>worklistSearchTooltip}" search="onSearch"
+							placeholder="{i18n>inputSearchMaterialText}" width="auto"></SearchField>
+						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" placeholder="{i18n>inputSearchSubGroupText}" search="onSearch"
+							width="auto"></SearchField>
+						<Button icon="sap-icon://add" press=".onOpenDialog"/>
+						<OverflowToolbarButton icon="sap-icon://delete" type="Reject" press="deleteRow" text="Delete"/>
+					</OverflowToolbar>
+				</headerToolbar>
+				<columns>
+					<Column id="ColumnCreatedBy">
+						<Text text="{i18n>tableUnitNumberColumnCreatedBy}" id="CreatedBy"/>
+					</Column>
+					<Column id="ModifiedBy">
+						<Text text="{i18n>tableUnitNumberColumnModifiedBy}" id="ColumnModifiedBy"/>
+					</Column>
+					<Column id="ColumnGroupText">
+						<Text text="{i18n>tableUnitNumberColumnGroupText}" id="GroupText"/>
+					</Column>
+					<Column id="ColumnSubGroupText">
+						<Text text="{i18n>tableUnitNumberColumnSubGroupText}" id="SubGroupText"/>
+					</Column>
+					<Column id="ColumnTitle">
+						<Text text="{i18n>tableUnitNumberColumnMaterialText}" id="nameColumnTitle"/>
+					</Column>
+					<Column id="Modified">
+						<Text text="{i18n>tableUnitNumberColumnModified}" id="ColumnModified"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem type="Navigation" press=".onPress" highlight="{= ${CreatedBy} === 'LAB1000009' ? 'Success' : undefined }">
+						<cells>
+							<ObjectNumber number="{CreatedBy}" state="{= ${CreatedBy} === 'LAB1000009' ? 'Success' : undefined }"/>
+							<Text text="{ModifiedBy}"/>
+							<Text text="{GroupText}"/>
+							<Text text="{SubGroupText}"/>
+							<Text text="{MaterialText}"/>
+							<ObjectNumber unit="{ path: 'Modified', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'HH.mm dd/MM/yyyy' } }"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</semantic:content>
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
+		</semantic:sendEmailAction>
+	</semantic:SemanticPage>
+</mvc:View>
