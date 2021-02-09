@@ -136,6 +136,7 @@ sap.ui.define([
 			var sText = oEvent.getParameter('value');
 			var bButtonEnabled = !!this.getModel('worklistView').getProperty("/inputValidation/GroupID") && !!this.getModel('worklistView').getProperty(
 				"/inputValidation/MaterialText") && !!this.getModel('worklistView').getProperty("/inputValidation/SubGroupID");
+
 			this.getModel('worklistView').setProperty("/inputValidation/saveButtonEnabled", bButtonEnabled);
 		},
 		deleteRow: function () {
@@ -144,9 +145,12 @@ sap.ui.define([
 			var oSelectedContexts = oTable.getSelectedContexts();
 			var oModel = this.getOwnerComponent().getModel();
 			var sMessageTosti18n = this.getView().getModel("i18n").getResourceBundle().getText("messageTostSelectError");
+			var sdeletionSuccessfulStatus = this.getView().getModel("i18n").getResourceBundle().getText("deletionSuccessful");
+			var sdeletionSuccessfulStatus = this.getView().getModel("i18n").getResourceBundle().getText("deletionErrorStatus");
+			var sDeletionErrorSelected = this.getView().getModel("i18n").getResourceBundle().getText("deletionErrorSelected");
 			for (var i = 0; i < oSelectedContexts.length; i++) {
-				var a = oSelectedContexts[i].getPath();
-				if (this.getView().getModel().getProperty(a + "/CreatedBy") != 'LAB1000009') {
+				var oPath = oSelectedContexts[i].getPath();
+				if (this.getView().getModel().getProperty(oPath + "/CreatedBy") != 'LAB1000009') {
 					MessageToast.show(sMessageTosti18n);
 					return;
 				}
@@ -158,19 +162,19 @@ sap.ui.define([
 
 				}.bind(this));
 				Promise.all(aPromise).then(function (aData) {
-					sap.m.MessageBox.show("Deletion successful", {
+					sap.m.MessageBox.show(sdeletionSuccessfulStatus, {
 						icon: sap.m.MessageBox.Icon.SUCCESS,
 						title: "Success!"
 					});
 				}).catch(function () {
-					sap.m.MessageBox.show("Oops! Something wrong to Delete.", {
+					sap.m.MessageBox.show(sdeletionSuccessfulStatus, {
 						icon: sap.m.MessageBox.Icon.ERROR,
 						title: "Failed!"
 					});
 				});
 
 			} else {
-				sap.m.MessageBox.show("Please select a row to delete!", {
+				sap.m.MessageBox.show(sDeletionErrorSelected, {
 					icon: sap.m.MessageBox.Icon.WARNING,
 					title: "Note!"
 				});
