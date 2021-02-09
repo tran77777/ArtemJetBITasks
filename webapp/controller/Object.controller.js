@@ -83,6 +83,7 @@ sap.ui.define([
 				});
 				this._bindView("/" + sObjectPath);
 			}.bind(this));
+			this.getView().getModel().resetChanges();
 			this.getView().getModel("objectView").setProperty("/viewMode","D");
 		},
 
