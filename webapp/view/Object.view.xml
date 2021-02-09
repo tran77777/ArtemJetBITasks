@@ -14,21 +14,21 @@
 			columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
 			<f:content>
 				<Label text="{i18n>MaterialID}"/>
-				<Text id="MaterialID" text="{MaterialID}"/>
+				<Text  text="{MaterialID}"/>
 				<Label text="{i18n>tableUnitNumberColumnModifiedBy}"/>
-				<Text id="nameText" text="{ModifiedBy}"/>
+				<Text  text="{ModifiedBy}"/>
 				<Label text="{i18n>tableUnitNumberColumnCreatedBy}"/>
 				<Text id="CreatedByInput" text="{CreatedBy}"/>
 				<Label text="{i18n>tableUnitNumberColumnGroupText}"/>
 				<Text text="{GroupText}"/>
 				<Label text="{i18n>tableUnitNumberColumnSubGroupText}"/>
 				<Text text="{SubGroupText}"/>
-				<Label text="{i18n>tableUnitNumberColumnMaterialText}"/>
-				<Input id="MaterialTextInput" showSuggestion="true" value="{MaterialText}" editable="{= ${objectView>/viewMode} === 'E' ? true : false }"/>
+				<Label text="{i18n>tableUnitNumberColumnMaterialText}" design="Bold" />
+				<Input  showSuggestion="true" value="{MaterialText}" editable="{= ${objectView>/viewMode} === 'E' ? true : false }"/>
 				<Label text="{i18n>tableUnitNumberColumnSubGroupID}" labelFor="SubGroupText" design="Bold"/>
-				<Input editable="{= ${objectView>/viewMode} === 'E' ? true : false }" id="SubGroupIDDialog" value="{SubGroupID}"/>
+				<Input editable="{= ${objectView>/viewMode} === 'E' ? true : false }" value="{SubGroupID}"/>
 				<Label text="{i18n>tableUnitNumberColumnGroupID}" labelFor="Language" design="Bold"/>
-				<Input editable="{= ${objectView>/viewMode} === 'E' ? true : false }" id="GroupIDDialog" value="{GroupID}"/>
+				<Input editable="{= ${objectView>/viewMode} === 'E' ? true : false }"  value="{GroupID}"/>
 				<Label text="{i18n>tableUnitNumberColumnModified}"/>
 				<Text text="{Modified}"/>
 			</f:content>

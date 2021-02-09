@@ -2,11 +2,11 @@
 	<Dialog id="oDialog" title="{i18n>dialogTitle}">
 		<VBox class="sapUiResponsiveMargin">
 			<Label text="{i18n>tableUnitNumberColumnGroupID}" labelFor="Language" design="Bold"/>
-			<Input id="GroupIDDialog" valueLiveUpdate="true" liveChange="onLiveChange" value="{worklistView>/inputValidation/GroupID}"/>
+			<Input  valueLiveUpdate="true" liveChange="onLiveChange" value="{worklistView>/inputValidation/GroupID}"/>
 			<Label text="{i18n>tableUnitNumberColumnSubGroupID}" labelFor="SubGroupText" design="Bold"/>
-			<Input id="SubGroupID" value="{worklistView>/inputValidation/SubGroupID}" valueLiveUpdate="true" liveChange="onLiveChange"/>
+			<Input  value="{worklistView>/inputValidation/SubGroupID}" valueLiveUpdate="true" liveChange="onLiveChange"/>
 			<Label text="{i18n>tableUnitNumberColumnMaterialText}" labelFor="MaterialText" design="Bold"/>
-			<Input id="MaterialTextDialog" value="{worklistView>/inputValidation/MaterialText}" valueLiveUpdate="true" liveChange="onLiveChange"/>
+			<Input  value="{worklistView>/inputValidation/MaterialText}" valueLiveUpdate="true" liveChange="onLiveChange"/>
 		</VBox>
 		<buttons>
 			<Button type="Emphasized" text="{i18n>dialogSaveButtonText}" enabled="{worklistView>/inputValidation/saveButtonEnabled}" press=".onSave"/>
