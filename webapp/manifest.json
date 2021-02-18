@@ -16,13 +16,26 @@
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0",
-					"localUri": "localService/metadata.xml"
+					"localUri": "localService/metadata.xml",
+					"annotations": [
+						"annotation"
+					]
+				}
+			},
+			"annotation": {
+				"type": "ODataAnnotation",
+				"uri": "annotation/annotation.xml",
+				"settings": {
+					"localUri": "annotation/annotation.xml"
 				}
 			}
 		},
 		"sourceTemplate": {
 			"id": "sap.ui.ui5-template-plugin.1worklist",
 			"version": "1.86.1"
+		},
+		"crossNavigation": {
+			"inbounds": {}
 		}
 	},
 	"sap.ui": {
@@ -73,6 +86,10 @@
 				"settings": {
 					"defaultBindingMode": "TwoWay"
 				}
+			},
+			"@i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"uri": "i18n/i18n.properties"
 			}
 		},
 		"routing": {
@@ -83,19 +100,28 @@
 				"controlId": "app",
 				"controlAggregation": "pages",
 				"bypassed": {
-					"target": ["notFound"]
+					"target": [
+						"notFound"
+					]
 				},
 				"async": true
 			},
-			"routes": [{
-				"pattern": "",
-				"name": "worklist",
-				"target": ["worklist"]
-			}, {
-				"pattern": "zjblessons_base_Materials/{objectId}",
-				"name": "object",
-				"target": ["object"]
-			}],
+			"routes": [
+				{
+					"pattern": "",
+					"name": "worklist",
+					"target": [
+						"worklist"
+					]
+				},
+				{
+					"pattern": "zjblessons_base_Materials/{objectId}",
+					"name": "object",
+					"target": [
+						"object"
+					]
+				}
+			],
 			"targets": {
 				"worklist": {
 					"viewName": "Worklist",

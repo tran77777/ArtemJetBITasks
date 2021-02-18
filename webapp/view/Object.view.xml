@@ -1,37 +1,132 @@
-<mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
-	xmlns:core="sap.ui.core" controllerName="jet.MyFirstProject.controller.Object">
-	<VBox class="sapUiSmallMargin">
-		<Bar>
-			<contentRight>
-				<Button id="edit" text="Edit" visible="{= ${objectView>/viewMode} === 'D' ? true : false }" press="handleEditPress"/>
-				<Button id="cancel" text="Cancel" visible="{= ${objectView>/viewMode} === 'E' ? true : false }" press="handleCancelPress"/>
-				<Button id="save" text="{i18n>dialogSaveButtonText}" type="Emphasized" visible="{= ${objectView>/viewMode} === 'E' ? true : false }"
-					press="handleSavePress"/>
-			</contentRight>
-		</Bar>
-		<f:SimpleForm id="SimpleFormDisplay354" editable="false" layout="ResponsiveGridLayout" title="{i18n>oItemTitle}" labelSpanXL="3"
-			labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0"
-			columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
-			<f:content>
-				<Label text="{i18n>MaterialID}"/>
-				<Text  text="{MaterialID}"/>
-				<Label text="{i18n>tableUnitNumberColumnModifiedBy}"/>
-				<Text  text="{ModifiedBy}"/>
-				<Label text="{i18n>tableUnitNumberColumnCreatedBy}"/>
-				<Text id="CreatedByInput" text="{CreatedBy}"/>
-				<Label text="{i18n>tableUnitNumberColumnGroupText}"/>
-				<Text text="{GroupText}"/>
-				<Label text="{i18n>tableUnitNumberColumnSubGroupText}"/>
-				<Text text="{SubGroupText}"/>
-				<Label text="{i18n>tableUnitNumberColumnMaterialText}" design="Bold" />
-				<Input  showSuggestion="true" value="{MaterialText}" editable="{= ${objectView>/viewMode} === 'E' ? true : false }"/>
-				<Label text="{i18n>tableUnitNumberColumnSubGroupID}" labelFor="SubGroupText" design="Bold"/>
-				<Input editable="{= ${objectView>/viewMode} === 'E' ? true : false }" value="{SubGroupID}"/>
-				<Label text="{i18n>tableUnitNumberColumnGroupID}" labelFor="Language" design="Bold"/>
-				<Input editable="{= ${objectView>/viewMode} === 'E' ? true : false }"  value="{GroupID}"/>
-				<Label text="{i18n>tableUnitNumberColumnModified}"/>
-				<Text text="{Modified}"/>
-			</f:content>
-		</f:SimpleForm>
-	</VBox>
+<mvc:View controllerName="jet.MyFirstProject.controller.Object" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:smartField="sap.ui.comp.smartfield"
+	xmlns:smartForm="sap.ui.comp.smartform" xmlns:footerbar="sap.ushell.ui.footerbar">
+	<semantic:SemanticPage id="page" headerPinnable="false" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+		toggleHeaderOnTitleClick="false" busy="{objectView>/busy}" busyIndicatorDelay="{objectView>/delay}">
+		<semantic:titleHeading>
+			<l:VerticalLayout>
+				<Button tooltip="Back to worklist" enabled="{= !${objectView>/enableChange}}" icon="sap-icon://nav-back" press="onNavBack"/>
+				<Title text=" {parts:['i18n>headerObjectText', 'MaterialID', 'MaterialText','IntegrationID' ], formatter: 'jQuery.sap.formatMessage' } "/>
+			</l:VerticalLayout>
+		</semantic:titleHeading>
+		<semantic:content>
+			<IconTabBar id="idIconTabBarMulti" select=".onFilterSelect" selectKey="{objectView>/selectedTab}" expanded="true"
+				class="sapUiNoContentPadding">
+				<items>
+					<IconTabFilter id="qwe" icon="sap-icon://hint" enabled="{= !${objectView>/enableChange} || ${objectView>/selectedTab}==='List'}" key="List">
+						<Button text="Submit Changes" icon="sap-icon://approvals" press="onPressSubmitChanges" enabled="{objectView>/buttonEnabled}"/>
+						<Button text="Reset Changes" icon="sap-icon://reset" press="onPressResetChanges" enabled="{objectView>/buttonEnabled}"/>
+						<Button text="Refresh" enabled="{= !${objectView>/enableChange}}" icon="sap-icon://refresh" press="onPressRefresh"/>
+						<List>
+							<items>
+								<InputListItem type="Active" label="{i18n>labelEnableChange}">
+									<Switch change="onPressChange"/>
+								</InputListItem>
+								<InputListItem label="{i18n>labelMaterialText}">
+									<Input maxLength="128" value="{MaterialText}" enabled="{objectView>/enableChange}" liveChange="onLiveChange" valueLiveUpdate="true"/>
+								</InputListItem>
+								<InputListItem label="{i18n>labelSubGroupID}">
+									<Select change="onLiveChange" forceSelection="false" selectedKey="{SubGroupID}" showSecondaryValues="true"
+										items="{path:'/zjblessons_base_SubGroups',sorter:{path:'SubGroupID', descending:false}}"
+										enabled="{= ${GroupID} > '3' &amp;&amp; ${objectView>/enableChange}}">
+										<core:Item key="{SubGroupID}" text="{SubGroupText}"/>
+									</Select>
+								</InputListItem>
+								<InputListItem label="{i18n>labelGroupID}">
+									<RadioButtonGroup columns="5" select="onSelect" selectedIndex="{path:'GroupID', formatter:'.formatter.formatRadioButton'}">
+										<RadioButton text="1-Зимняя" enabled="{objectView>/enableChange}"/>
+										<RadioButton text="2-Летняя" enabled="{objectView>/enableChange}"/>
+										<RadioButton text="3-Всесезонная" enabled="{objectView>/enableChange}"/>
+										<RadioButton text="4-Спортивная" enabled="{objectView>/enableChange}"/>
+										<RadioButton text="5-Для дома и отдыха" enabled="{objectView>/enableChange}"/>
+									</RadioButtonGroup>
+								</InputListItem>
+								<InputListItem label="{i18n>labelGroupText}">
+									<Text text="{GroupText}"/>
+								</InputListItem>
+								<InputListItem label="{i18n>labelIntegrationID}">
+									<Input maxLength="20" value="{IntegrationID}" enabled="{objectView>/enableChange}" width="20%" liveChange="onLiveChange"
+										valueLiveUpdate="true"/>
+								</InputListItem>
+								<InputListItem label="{i18n>labelCreatedBy}">
+									<Text id="CreatedByInput" text="{CreatedBy}"/>
+								</InputListItem>
+								<InputListItem label="{i18n>labelModifiedBy}">
+									<Text text="{ModifiedBy}"/>
+								</InputListItem>
+								<InputListItem label="CreateInfo">
+									<Text text="{parts:['CreatedBy','Created','Modified'],formatter:'.formatter.formatInfo'}"/>
+								</InputListItem>
+								<InputListItem label="{i18n>labelVisible}">
+									<Text text="{= ${objectView>/enableChange} ? ${i18n>visibleEdit} : ${i18n>visibleView} }"/>
+								</InputListItem>
+							</items>
+						</List>
+					</IconTabFilter>
+					<IconTabFilter icon="sap-icon://group" key="Form" enabled="{= !${objectView>/enableChange} || ${objectView>/selectedTab}==='Form'}">
+						<smartForm:SmartForm id="smartForm" editTogglable="true" editToggled="onPressChange" title="eeaf"
+							app:defaultCheckBoxDisplayBehaviour="OnOff" app:defaultDropDownDisplayBehaviour="idAndDescription">
+								<smartForm:layout>
+				<smartForm:ColumnLayout columnsM="2" columnsL="3" columnsXL="4"/>
+			</smartForm:layout>
+							<smartForm:customToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<OverflowToolbarButton icon="sap-icon://refresh" press="onPressRefresh"/>
+								</OverflowToolbar>
+							</smartForm:customToolbar>
+							<smartForm:Group label="{i18n>ttMainInfo}">
+								<smartForm:GroupElement>
+									<smartField:SmartField value="{MaterialText}" visible="true" mandatory="true"> 
+									<smartField:configuration>
+										<smartField:Configuration controlType="dropDownList" displayBehaviour="descriptionAndId"/>
+									</smartField:configuration>
+									</smartField:SmartField>
+								</smartForm:GroupElement>
+								<smartForm:GroupElement>
+									<smartField:SmartField value="{MaterialDescription}" app:multiLineSettings="{cols: 60, rows: 5}" mandatory="false"/>
+								</smartForm:GroupElement>
+							</smartForm:Group>
+							<smartForm:Group label="{i18n>ttGroupInfo}">
+								<smartForm:GroupElement>
+									<smartField:SmartField change=".onSelects" value="{GroupText}" fetchValueListReadOnly="false" showValueHelp="false"/>
+									<smartField:SmartField value="{GroupID}" mandatory="true" visible="false"/>
+								</smartForm:GroupElement>
+							</smartForm:Group>
+							<smartForm:Group label="{i18n>ttSubGroupInfo}">
+								<smartForm:GroupElement>
+									<smartField:SmartField value="{SubGroupText}" mandatory="true"/>
+									<smartField:SmartField value="{SubGroupID}" mandatory="true" visible="false"/>
+								</smartForm:GroupElement>
+							</smartForm:Group>
+							<smartForm:Group label="{i18n>ttCreationInfo}">
+								<smartForm:GroupElement>
+									<smartField:SmartField value="{Created}" mandatory="false" editable="false"/>
+								</smartForm:GroupElement>
+								<smartForm:GroupElement>
+									<smartField:SmartField value="{CreatedBy}" mandatory="false"/>
+								</smartForm:GroupElement>
+							</smartForm:Group>
+							<smartForm:Group label="{i18n>ttModificationInfo}">
+								<smartForm:GroupElement>
+									<smartField:SmartField value="{Modified}" mandatory="false"/>
+								</smartForm:GroupElement>
+								<smartForm:GroupElement>
+									<smartField:SmartField value="{ModifiedBy}" mandatory="false"/>
+								</smartForm:GroupElement>
+							</smartForm:Group>
+						</smartForm:SmartForm>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</semantic:content>
+		<semantic:titleCustomTextActions>
+			<Button id="edit" text="Edit" visible="{= !${objectView>/editableForm} &amp;&amp; ${objectView>/selectedTab}==='Form'}"
+				press="handleEditToggled"/>
+			<Button id="cancel" text="Cancel" visible="{= ${objectView>/editableForm} &amp;&amp; ${objectView>/selectedTab}==='Form'}"
+				press="handleCancelPress"/>
+			<Button id="save" text="{i18n>dialogSaveButtonText}" type="Emphasized" enabled="true" press="onPressSubmitChanges"
+				visible="{= ${objectView>/editableForm} &amp;&amp; ${objectView>/selectedTab}==='Form'}"/>
+		</semantic:titleCustomTextActions>
+	</semantic:SemanticPage>
 </mvc:View>

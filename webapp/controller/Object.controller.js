@@ -4,8 +4,13 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"../model/formatter",
 	'sap/m/MessageToast',
-	"../model/formatter"
-], function (BaseController, JSONModel, History, formatter, MessageToast) {
+	"sap/m/Dialog",
+	"sap/m/DialogType",
+	"sap/m/Button",
+	"sap/m/ButtonType",
+	"sap/m/Text"
+
+], function (BaseController, JSONModel, History, formatter, MessageToast, Dialog, DialogType, Button, ButtonType, Text) {
 	"use strict";
 
 	return BaseController.extend("jet.MyFirstProject.controller.Object", {
@@ -21,17 +26,12 @@ sap.ui.define([
 		 * @public
 		 */
 		onInit: function () {
-		
+
 			// Model used to manipulate control states. The chosen values make sure,
 			// detail page is busy indication immediately so there is no break in
 			// between the busy indication for loading the view's meta data
 			var iOriginalBusyDelay,
-				oViewModel = new JSONModel({
-					busy: true,
-					delay: 0,
-					viewMode:"D"
-					
-				});
+				oViewModel = new JSONModel();
 
 			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 
@@ -44,7 +44,7 @@ sap.ui.define([
 			});
 
 		},
-	
+
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
@@ -62,6 +62,7 @@ sap.ui.define([
 				history.go(-1);
 			} else {
 				this.getRouter().navTo("worklist", {}, true);
+
 			}
 		},
 
@@ -81,10 +82,19 @@ sap.ui.define([
 				var sObjectPath = this.getModel().createKey("zjblessons_base_Materials", {
 					MaterialID: sObjectId
 				});
+				this.getModel("objectView").setData({
+					busy: true,
+					delay: 0,
+					buttonEnabled: false,
+					enableChange: false,
+					editableForm: false,
+					selectedTab: "List"
+
+				});
+
 				this._bindView("/" + sObjectPath);
 			}.bind(this));
-			this.getView().getModel().resetChanges();
-			this.getView().getModel("objectView").setProperty("/viewMode","D");
+
 		},
 
 		/**
@@ -140,36 +150,71 @@ sap.ui.define([
 			oViewModel.setProperty("/shareSendEmailMessage",
 				oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
 		},
-		handleEditPress: function () {
+		onPressRefresh: function () {
+			this.getView().getModel().refresh(true);
+		},
+		onLiveChange: function () {
+			var bHasPendingChanges = this.getView().getModel().hasPendingChanges();
+			this.getView().getModel("objectView").setProperty("/buttonEnabled", bHasPendingChanges);
+		},
+		
+		onFilterSelect: function (oEvent) {
+			var sKey=oEvent.getParameter("key");
+			this.getView().getModel("objectView").setProperty("/selectedTab", sKey);
+			this.getView().getModel("objectView").setProperty("/buttonEdit", sKey==="Form");
+		},
+		onSelects:function(oEvent){
+		
+		MessageToast.show(oEvent.getSource().getValue())
+		},
+		onPressChange: function (oEvent) {
+debugger
+			var bEnableChange = this.getView().getModel("objectView").getProperty("/enableChange");
+			if (this.validateUser()) {
+				this.getView().getModel("objectView").setProperty("/enableChange", !bEnableChange);
+				if (this.getView().getModel().hasPendingChanges()) {
 
-			if (this.validationCreatedBy()) {
-				this.getView().getModel("objectView").setProperty("/viewMode","E");
-			}
-		},
-		validationCreatedBy: function () {
-			var sMessageTosti18n = this.getView().getModel("i18n").getResourceBundle().getText("messageTostUpdateError");
-			if (this.getView().byId("CreatedByInput").getText() !== "LAB1000009") {
-				MessageToast.show(sMessageTosti18n);
-				return false;
+					this.openApproveDialog();
+					return;
+				}
 			} else {
-				return true;
+				var sMessageTosti18n = this.getView().getModel("i18n").getResourceBundle().getText("messageTostUpdateError");
+				oEvent.getSource().setState(this.validateUser());
+				MessageToast.show(sMessageTosti18n);
 			}
 		},
-		handleSavePress: function () {
+		validateUser: function (oEvent) {
+		
+			return this.getView().byId("CreatedByInput").getText() === "LAB1000009";
+		},
+
+		onSelect: function (oEvent) {
+
+			var oPath = this.getView().getBindingContext();
+			var iIndex = oEvent.getSource().getSelectedIndex() + 1;
+			this.getView().getModel().setProperty("GroupID", String(iIndex), oPath);
+			this.onLiveChange();
+		},
+		onPressSubmitChanges: function (oEvent) {
 
 			this.getView().setBusy(true);
 			var messageBoxUpdate = this.getView().getModel("i18n").getResourceBundle().getText("messageBoxUpdate");
 			var messageBoxError = this.getView().getModel("i18n").getResourceBundle().getText("messageBoxUpdateError");
-			var oModel = this.getOwnerComponent().getModel();
 			var infoMB = this.getView().getModel("i18n").getResourceBundle().getText("infoMB");
+			var oModel = this.getView().getModel();
+
 			oModel.submitChanges({
 				success: function () {
 					sap.m.MessageBox.show(messageBoxUpdate, {
 						icon: sap.m.MessageBox.Icon.SUCCESS,
 						title: infoMB
 					});
+					this.onLiveChange();
+					
+					this.getView().getModel("objectView").setProperty("/enableChange", false);
 					this.getView().setBusy(false);
-					this.cancelChanges();
+					this.getView().getModel().resetChanges();
+
 				}.bind(this),
 				error: function () {
 					sap.m.MessageBox.show(messageBoxError, {
@@ -180,13 +225,58 @@ sap.ui.define([
 				}.bind(this)
 			});
 		},
-		handleCancelPress: function () {
-			this.cancelChanges();
-		},
-		cancelChanges: function () {
-			this.getView().getModel("objectView").setProperty("/viewMode","D");
+
+		onPressResetChanges: function () {
+			debugger
+			this.getView().byId("smartForm").setEditable(false);
 			this.getView().getModel().resetChanges();
-		}
+			this.onLiveChange();
+		},
+		handleCancelPress:function(){
+			this.getView().getModel("objectView").setProperty("/enableChange", false);
+			this.onPressResetChanges();
+		},
+		
+
+		openApproveDialog: function () {
+			var dialogSaveButtonText = this.getView().getModel("i18n").getResourceBundle().getText("dialogSaveButtonText");
+			var dialogCancelButtonText = this.getView().getModel("i18n").getResourceBundle().getText("dialogCancelButtonText");
+			if (!this.oApproveDialog) {
+				this.oApproveDialog = new Dialog({
+					type: DialogType.Message,
+					title: "Confirm",
+					content: new Text({
+						text: "Save changes?"
+					}),
+					beginButton: new Button({
+						type: ButtonType.Emphasized,
+						text: dialogSaveButtonText,
+						press: function () {
+							this.onPressSubmitChanges();
+							this.oApproveDialog.close();
+						}.bind(this)
+					}),
+					endButton: new Button({
+						text: dialogCancelButtonText,
+						press: function () {
+	
+							this.getView().getModel("objectView").setProperty("/enableChange", false);
+							this.oApproveDialog.close();
+							this.onPressResetChanges();
+						}.bind(this)
+					})
+				});
+			}
+
+			this.oApproveDialog.open();
+		},
+		handleEditToggled: function (oEven) {
+			debugger
+		this.getView().getModel("objectView").setProperty("/editableForm", false);
+		this.getView().byId("smartForm").setEditable(true);
+	
+		},
+		
 
 	});
 

@@ -14,6 +14,24 @@ sap.ui.define([], function () {
 				return "";
 			}
 			return parseFloat(sValue).toFixed(2);
+		},
+		formatRadioButton:function (sValue) {
+			return (sValue !== null) ? parseInt(sValue, 10)-1:-1;
+		},
+		
+		formatInfo:function (sUser,dDate,Modified) {
+		
+		var oDate=	sap.ui.core.format.DateFormat.getDateInstance({
+			pattern : "yyyy/MM/dd"
+			});
+				
+			if(!!sUser){
+				var sUser=	sUser.substr(3);
+				
+			}
+		
+		return this.getView().getModel("i18n").getResourceBundle().getText("labelCreatedBy")+": "+ oDate.format(dDate)+ ", "+this.getView().getModel("i18n").getResourceBundle().getText("labelCreated")+
+		": " +sUser+", "+this.getView().getModel("i18n").getResourceBundle().getText("labelModified")+': '+oDate.format(Modified);
 		}
 
 	};

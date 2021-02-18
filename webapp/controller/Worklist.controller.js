@@ -59,6 +59,9 @@ sap.ui.define([
 				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
 			});
 		},
+		onPressRefresh:function(){
+			this.getView().getModel().refresh(true);
+		},
 
 		onOpenDialog: function () {
 			var oView = this.getView();

@@ -1,61 +1,57 @@
 <mvc:View controllerName="jet.MyFirstProject.controller.Worklist" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic">
-	<semantic:SemanticPage id="page" headerPinnable="false" toggleHeaderOnTitleClick="false">
-		<semantic:titleHeading>
-			<Title text="{i18n>worklistTitle}" level="H2"/>
-		</semantic:titleHeading>
-		<semantic:content>
-			<Table id="table" mode="MultiSelect" width="auto"
-				items="{ path: '/zjblessons_base_Materials', sorter: { path: 'CreatedBy', descending: false, group : true } }"
-				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingThreshold="20"
-				updateFinished=".onUpdateFinished">
-				<headerToolbar>
-					<OverflowToolbar>
-						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
-						<ToolbarSpacer/>
-						<SearchField id="searchFieldMaterialText" tooltip="{i18n>worklistSearchTooltip}" search="onSearch"
-							placeholder="{i18n>inputSearchMaterialText}" width="auto"></SearchField>
-						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" placeholder="{i18n>inputSearchSubGroupText}" search="onSearch"
-							width="auto"></SearchField>
-						<Button icon="sap-icon://add" press=".onOpenDialog"/>
-						<OverflowToolbarButton icon="sap-icon://delete" type="Reject" press="deleteRow" text="Delete"/>
-					</OverflowToolbar>
-				</headerToolbar>
-				<columns>
-					<Column id="ColumnCreatedBy">
-						<Text text="{i18n>tableUnitNumberColumnCreatedBy}" id="CreatedBy"/>
-					</Column>
-					<Column id="ModifiedBy">
-						<Text text="{i18n>tableUnitNumberColumnModifiedBy}" id="ColumnModifiedBy"/>
-					</Column>
-					<Column id="ColumnGroupText">
-						<Text text="{i18n>tableUnitNumberColumnGroupText}" id="GroupText"/>
-					</Column>
-					<Column id="ColumnSubGroupText">
-						<Text text="{i18n>tableUnitNumberColumnSubGroupText}" id="SubGroupText"/>
-					</Column>
-					<Column id="ColumnTitle">
-						<Text text="{i18n>tableUnitNumberColumnMaterialText}" id="nameColumnTitle"/>
-					</Column>
-					<Column id="Modified">
-						<Text text="{i18n>tableUnitNumberColumnModified}" id="ColumnModified"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem type="Navigation" press=".onPress" highlight="{= ${CreatedBy} === 'LAB1000009' ? 'Success' : undefined }">
-						<cells>
-							<ObjectNumber number="{CreatedBy}" state="{= ${CreatedBy} === 'LAB1000009' ? 'Success' : undefined }"/>
-							<Text text="{ModifiedBy}"/>
-							<Text text="{GroupText}"/>
-							<Text text="{SubGroupText}"/>
-							<Text text="{MaterialText}"/>
-							<ObjectNumber unit="{ path: 'Modified', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'HH.mm dd/MM/yyyy' } }"/>
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-		</semantic:content>
-		<semantic:sendEmailAction>
-			<semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
-		</semantic:sendEmailAction>
-	</semantic:SemanticPage>
-</mvc:View>
+	<semantic:SemanticPage id="page" headerPinnable="false" xmlns:smartfilterbar="sap.ui.comp.smartfilterbar"
+		xmlns:smartTable="sap.ui.comp.smarttable" xmlns:smartFilterBar="sap.ui.comp.smartfilterbar" toggleHeaderOnTitleClick="false">
+		<semantic:headerContent>
+			<smartfilterbar:SmartFilterBar id="smartFilterBar" useVariantManagement="true" smartVariant="__SVM01" persistencyKey="UniqueAndStablePersistencyKey"
+				entitySet="zjblessons_base_Materials" header="Materials" useToolbar="true"  >
+			<smartFilterBar:controlConfiguration>
+			
+				<smartFilterBar:ControlConfiguration key="Created" conditionType="{
+						module: 'sap.ui.comp.config.condition.DateRangeType',
+						ignoreTime: false,
+						operations: {
+							filter: [
+								{path: 'category', contains: 'MONTH', exclude:true},
+								{path: 'category', contains: 'QUARTER', exclude:true},
+								{path: 'key', equals: 'TO', exclude:true}
+							]
+						}
+					}"
+					visibleInAdvancedArea="true">
+				</smartFilterBar:ControlConfiguration>
+			</smartFilterBar:controlConfiguration>
+				
+				</smartfilterbar:SmartFilterBar>
+			</semantic:headerContent>
+			<semantic:content>
+				<smartTable:SmartTable id="LineItemsSmartTable" persistencyKey="SmartTableAnalytical_Explored" entitySet="zjblessons_base_Materials"
+					smartFilterId="smartFilterBar" tableType="ResponsiveTable" useExportToExcel="true" useVariantManagement="true"
+					useTablePersonalisation="true" header="Line Items" showRowCount="true" enableAutoBinding="true" showFullScreenButton="true"
+					>
+					<!-- layout data used to make the table growing but the filter bar fixed -->
+					<smartTable:customToolbar>
+						<OverflowToolbar>
+							<ToolbarSpacer/>
+							<SearchField id="searchFieldMaterialText" tooltip="{i18n>worklistSearchTooltip}" search="onSearch"
+								placeholder="{i18n>inputSearchMaterialText}" width="auto"></SearchField>
+							<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" placeholder="{i18n>inputSearchSubGroupText}" search="onSearch"
+								width="auto"></SearchField>
+							<Button text="Refresh" icon="sap-icon://refresh" press="onPressRefresh"/>
+							<Button icon="sap-icon://add" press=".onOpenDialog"/>
+							<OverflowToolbarButton icon="sap-icon://delete" type="Reject" press="deleteRow" text="Delete"/>
+						</OverflowToolbar>
+					</smartTable:customToolbar>
+					<Table id="table" mode="MultiSelect" width="auto" noDataText="{worklistView>/tableNoDataText}"
+						busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingThreshold="20" updateFinished=".onUpdateFinished">
+						<columns></columns>
+						<items>
+							<ColumnListItem type="Navigation" press=".onPress"></ColumnListItem>
+						</items>
+					</Table>
+				</smartTable:SmartTable>
+			</semantic:content>
+			<semantic:sendEmailAction>
+				<semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
+			</semantic:sendEmailAction>
+		</semantic:SemanticPage>
+	</mvc:View>

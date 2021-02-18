@@ -1,0 +1,198 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+	<edmx:Reference Uri="/jetCloud/apps/zjblessons/jblesson02/v01/01.xsodata/$metadata">
+		<edmx:Include Alias="Metadata" Namespace="jetCloud.apps.zjblessons.jblesson02.v01.01"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="https://wiki.scn.sap.com/wiki/download/attachments/448470968/UI.xml?api=v2">
+		<edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="https://wiki.scn.sap.com/wiki/download/attachments/448470974/Common.xml?api=v2">
+		<edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+	</edmx:Reference>
+	<edmx:DataServices>
+		<Schema xmlns="http://docs.oasis-open.org/odata/ns/edm"
+			Namespace="ArtemJetBITasks.annotation.annotation.jetCloud.apps.zjblessons.jblesson02.v01.01">
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType">
+				<Annotation Term="UI.PresentationVariant">
+					<Record Type="UI.PresentationVariantType">
+						<PropertyValue Property="GroupBy">
+							<Collection>
+								<PropertyPath>CreatedBy</PropertyPath>
+							</Collection>
+						</PropertyValue>
+						<PropertyValue Property="RequestAtLeast">
+							<Collection>
+								<PropertyPath>MaterialID</PropertyPath>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="UI.SelectionFields">
+					<Collection>
+						<PropertyPath>CreatedBy</PropertyPath>
+						<PropertyPath>GroupText</PropertyPath>
+						<PropertyPath>SubGroupText</PropertyPath>
+						<PropertyPath>Created</PropertyPath>
+					</Collection>
+				</Annotation>
+				<Annotation Term="UI.LineItem">
+					<Collection>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="CreatedBy"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelCreatedBy}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="ModifiedBy"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelModifiedBy}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="GroupText"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelGroupText}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="SubGroupText"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelSubGroupText}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="MaterialText"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelMaterialText}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="Modified"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelModified}"/>
+						</Record>
+					</Collection>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/Version">
+				<Annotation Term="UI.Hidden" Bool="true"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/Language">
+				<Annotation Term="UI.Hidden" Bool="true"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/IntegrationID">
+				<Annotation Term="UI.Hidden" Bool="true"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/MaterialID">
+				<Annotation Term="UI.Hidden" Bool="true"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/CreatedByFullName">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreatedByFullName}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/Created">
+				<Annotation Term="Common.IsCalendarDate" Bool="true"/>
+				<Annotation Term="Common.ValueList">
+					<Record Type="Common.ValueListType">
+						<PropertyValue Property="CollectionPath" String="zjblessons_base_Items"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="Common.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="Created"/>
+									<PropertyValue Property="ValueListProperty" String="Created"/>
+								</Record>
+								<Record Type="Common.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="Created"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreated}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/SubGroupID">
+				<Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+				<Annotation Term="Common.ValueList">
+					<Record Type="Common.ValueListType">
+						<PropertyValue Property="CollectionPath" String="zjblessons_base_SubGroups"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="Common.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="SubGroupID"/>
+									<PropertyValue Property="ValueListProperty" String="SubGroupID"/>
+								</Record>
+								<Record Type="Common.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="Created"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelSubGroupID}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/CreatedByAvatar">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreatedByAvatar}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/GroupID">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelGroupID}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/ModifiedByFullName">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelModifiedByFullName}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/ModifiedByAvatar">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelModifiedByAvatar}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/GroupText">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelGroupText}"/>
+				<Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+				<Annotation Term="Common.ValueList">
+					<Record Type="Common.ValueListType">
+						<PropertyValue Property="CollectionPath" String="zjblessons_base_Groups"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="Common.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="GroupText"/>
+									<PropertyValue Property="ValueListProperty" String="GroupText"/>
+								</Record>
+								<Record Type="Common.ValueListParameterOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="GroupID"/>
+									<PropertyValue Property="ValueListProperty" String="GroupID"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/SubGroupText">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelSubGroupText}"/>
+				<Annotation Term="Common.ValueList">
+					<Record Type="Common.ValueListType">
+						<PropertyValue Property="CollectionPath" String="zjblessons_base_SubGroups"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="Common.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="SubGroupText"/>
+									<PropertyValue Property="ValueListProperty" String="SubGroupText"/>
+								</Record>
+								<Record Type="Common.ValueListParameterDisplayOnly">
+									<PropertyValue Property="ValueListProperty" String="Created"/>
+								</Record>
+								<Record Type="Common.ValueListParameterIn">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="GroupID"/>
+									<PropertyValue Property="ValueListProperty" String="GroupID"/>
+								</Record>
+								<Record Type="Common.ValueListParameterOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="SubGroupID"/>
+									<PropertyValue Property="ValueListProperty" String="SubGroupID"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/CreatedBy">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreatedBy}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/MaterialText">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelMaterialText}"/>
+				<Annotation Term="UI.MultiLineText" Bool="true"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/Modified">
+				<Annotation Term="Common.IsCalendarDate" Bool="true"/>
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelModified}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_MaterialsType/ModifiedBy">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelModifiedBy}"/>
+			</Annotations>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>
