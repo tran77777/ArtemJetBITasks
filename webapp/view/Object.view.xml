@@ -10,7 +10,7 @@
 			</l:VerticalLayout>
 		</semantic:titleHeading>
 		<semantic:content>
-			<IconTabBar id="idIconTabBarMulti" select=".onFilterSelect" selectKey="{objectView>/selectedTab}" expanded="true"
+			<IconTabBar id="idIconTabBarMulti" stretchContentHeight="true" select=".onFilterSelect" selectKey="{objectView>/selectedTab}" expanded="true"
 				class="sapUiNoContentPadding">
 				<items>
 					<IconTabFilter id="qwe" icon="sap-icon://hint" enabled="{= !${objectView>/enableChange} || ${objectView>/selectedTab}==='List'}" key="List">
@@ -64,11 +64,12 @@
 						</List>
 					</IconTabFilter>
 					<IconTabFilter icon="sap-icon://group" key="Form" enabled="{= !${objectView>/enableChange} || ${objectView>/selectedTab}==='Form'}">
-						<smartForm:SmartForm id="smartForm" editTogglable="true" editToggled="onPressChange" title="eeaf"
-							app:defaultCheckBoxDisplayBehaviour="OnOff" app:defaultDropDownDisplayBehaviour="idAndDescription">
-								<smartForm:layout>
-				<smartForm:ColumnLayout columnsM="2" columnsL="3" columnsXL="4"/>
-			</smartForm:layout>
+						<smartForm:SmartForm id="smartForm"
+							editTogglable="{= !${objectView>/enableChange} || !${objectView>/buttonEnabled} &amp;&amp; !${objectView>/editableForm} }"
+							editToggled="onPressChange" title="eeaf" app:defaultCheckBoxDisplayBehaviour="OnOff" app:defaultDropDownDisplayBehaviour="idAndDescription">
+							<smartForm:layout>
+								<smartForm:ColumnLayout columnsM="2" columnsL="3" columnsXL="4"/>
+							</smartForm:layout>
 							<smartForm:customToolbar>
 								<OverflowToolbar>
 									<ToolbarSpacer/>
@@ -77,10 +78,10 @@
 							</smartForm:customToolbar>
 							<smartForm:Group label="{i18n>ttMainInfo}">
 								<smartForm:GroupElement>
-									<smartField:SmartField value="{MaterialText}" visible="true" mandatory="true"> 
-									<smartField:configuration>
-										<smartField:Configuration controlType="dropDownList" displayBehaviour="descriptionAndId"/>
-									</smartField:configuration>
+									<smartField:SmartField value="{MaterialText}" contextEditable="true" change="onMateriallTextChange" visible="true">
+										<smartField:configuration>
+											<smartField:Configuration controlType="dropDownList" displayBehaviour="description"/>
+										</smartField:configuration>
 									</smartField:SmartField>
 								</smartForm:GroupElement>
 								<smartForm:GroupElement>
@@ -121,10 +122,10 @@
 			</IconTabBar>
 		</semantic:content>
 		<semantic:titleCustomTextActions>
-			<Button id="edit" text="Edit" visible="{= !${objectView>/editableForm} &amp;&amp; ${objectView>/selectedTab}==='Form'}"
-				press="handleEditToggled"/>
+			<Button id="edit" text="Edit" enabled="{= !${objectView>/enableChange}}"
+				visible="{= !${objectView>/editableForm} &amp;&amp; ${objectView>/selectedTab}==='Form'}" press="handleEditToggle"/>
 			<Button id="cancel" text="Cancel" visible="{= ${objectView>/editableForm} &amp;&amp; ${objectView>/selectedTab}==='Form'}"
-				press="handleCancelPress"/>
+				press="handleEditToggle"/>
 			<Button id="save" text="{i18n>dialogSaveButtonText}" type="Emphasized" enabled="true" press="onPressSubmitChanges"
 				visible="{= ${objectView>/editableForm} &amp;&amp; ${objectView>/selectedTab}==='Form'}"/>
 		</semantic:titleCustomTextActions>

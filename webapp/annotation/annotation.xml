@@ -183,8 +183,20 @@
 				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreatedBy}"/>
 			</Annotations>
 			<Annotations Target="Metadata.zjblessons_base_MaterialsType/MaterialText">
+				<Annotation Term="Common.ValueList">
+					<Record Type="Common.ValueListType">
+						<PropertyValue Property="CollectionPath" String="zjblessons_base_Materials"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="Common.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="MaterialText"/>
+									<PropertyValue Property="ValueListProperty" String="MaterialText"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
 				<Annotation Term="Common.Label" String="{@i18n&gt;labelMaterialText}"/>
-				<Annotation Term="UI.MultiLineText" Bool="true"/>
 			</Annotations>
 			<Annotations Target="Metadata.zjblessons_base_MaterialsType/Modified">
 				<Annotation Term="Common.IsCalendarDate" Bool="true"/>
