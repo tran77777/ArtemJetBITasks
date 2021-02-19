@@ -107,7 +107,6 @@ sap.ui.define([
 
 			var infoMB = this.getView().getModel("i18n").getResourceBundle().getText("infoMB");
 			var sStatusSuccessi18n = this.getView().getModel("i18n").getResourceBundle().getText("messageBoxSuccsess");
-			var sStatusErrori18n = this.getView().getModel("i18n").getResourceBundle().getText("messageBoxError");
 			var messageBoxError = this.getView().getModel("i18n").getResourceBundle().getText("messageBoxUpdateError");
 			oModel.create("/zjblessons_base_Materials", oItemRow, {
 				success: function () {
@@ -136,7 +135,6 @@ sap.ui.define([
 		},
 		onLiveChange: function (oEvent) {
 
-			var sText = oEvent.getParameter('value');
 			var bButtonEnabled = !!this.getModel('worklistView').getProperty("/inputValidation/GroupID") && !!this.getModel('worklistView').getProperty(
 				"/inputValidation/MaterialText") && !!this.getModel('worklistView').getProperty("/inputValidation/SubGroupID");
 
@@ -146,14 +144,12 @@ sap.ui.define([
 
 			var oTable = this.getView().byId("table");
 			var oSelectedContexts = oTable.getSelectedContexts();
-			var oModel = this.getOwnerComponent().getModel();
 			var sMessageTosti18n = this.getView().getModel("i18n").getResourceBundle().getText("messageTostSelectError");
 			var sdeletionSuccessfulStatus = this.getView().getModel("i18n").getResourceBundle().getText("deletionSuccessful");
-			var sdeletionSuccessfulStatus = this.getView().getModel("i18n").getResourceBundle().getText("deletionErrorStatus");
 			var sDeletionErrorSelected = this.getView().getModel("i18n").getResourceBundle().getText("deletionErrorSelected");
 			for (var i = 0; i < oSelectedContexts.length; i++) {
 				var oPath = oSelectedContexts[i].getPath();
-				if (this.getView().getModel().getProperty(oPath + "/CreatedBy") != 'LAB1000009') {
+				if (this.getView().getModel().getProperty(oPath + "/CreatedBy") !== 'LAB1000009') {
 					MessageToast.show(sMessageTosti18n);
 					return;
 				}
@@ -206,10 +202,17 @@ sap.ui.define([
 		 * @public
 		 */
 		onPress: function (oEvent) {
-			// The source is the list item that got pressed
+		
+		var sMessageTosti18n = this.getView().getModel("i18n").getResourceBundle().getText("messageTostSelectError");
+						var oPath = oEvent.getSource().getBindingContext().sPath;
+			if (this.getView().getModel().getProperty(oPath + "/CreatedBy") !== 'LAB1000009') {
+					MessageToast.show(sMessageTosti18n);
+					return;
+				}
 			this._showObject(oEvent.getSource());
 
 		},
+		
 
 		/**
 		 * Event handler for navigating back.
@@ -234,7 +237,7 @@ sap.ui.define([
 
 				if (sQuery && sQuery.length > 0) {
 					aTableSearchState = [new Filter("SubGroupText", FilterOperator.Contains, sQuery)];
-					if (oEvent.getSource().getId() == "container-MyFirstProject---worklist--searchFieldMaterialText") {
+					if (oEvent.getSource().getId() === "container-MyFirstProject---worklist--searchFieldMaterialText") {
 						aTableSearchState = [new Filter("MaterialText", FilterOperator.EQ, sQuery)];
 					}
 				}

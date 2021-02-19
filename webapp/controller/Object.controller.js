@@ -77,6 +77,7 @@ sap.ui.define([
 		 * @private
 		 */
 		_onObjectMatched: function (oEvent) {
+		
 			var sObjectId = oEvent.getParameter("arguments").objectId;
 			this.getModel().metadataLoaded().then(function () {
 				var sObjectPath = this.getModel().createKey("zjblessons_base_Materials", {
@@ -91,7 +92,7 @@ sap.ui.define([
 					selectedTab: "List"
 
 				});
-
+				this.getView().byId("iconTabBar").setSelectedKey("List");
 				this._bindView("/" + sObjectPath);
 			}.bind(this));
 
@@ -150,50 +151,46 @@ sap.ui.define([
 			oViewModel.setProperty("/shareSendEmailMessage",
 				oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
 		},
+		
 		onPressRefresh: function () {
 			this.getView().getModel().refresh(true);
 		},
+		
 		onLiveChange: function () {
 			var bHasPendingChanges = this.getView().getModel().hasPendingChanges();
 			this.getView().getModel("objectView").setProperty("/buttonEnabled", bHasPendingChanges);
 		},
 
 		onFilterSelect: function (oEvent) {
+		
 			var sKey = oEvent.getParameter("key");
 			this.getView().getModel("objectView").setProperty("/selectedTab", sKey);
 			this.getView().getModel("objectView").setProperty("/buttonEdit", sKey === "Form");
+			
 		},
-		onSelects: function (oEvent) {
+		onGroupTextSelect: function (oEvent) {
 
-			MessageToast.show(oEvent.getSource().getValue())
+			MessageToast.show(oEvent.getSource().getValue());
 		},
-		onMateriallTextChange(oEvent) {
+		
+		onMateriallTextChange:function(oEvent) {
 			var sValue = oEvent.getSource().getContent().getValue();
-			var oBindingContext = oEvent.getSource().getBindingContext()
-			this.getView().getModel().setProperty("MaterialText", sValue, oBindingContext)
+			var oBindingContext = oEvent.getSource().getBindingContext();
+			this.getView().getModel().setProperty("MaterialText", sValue, oBindingContext);
 		},
+		
 		onPressChange: function (oEvent) {
-			debugger
+		
 			var bEnableChange = this.getView().getModel("objectView").getProperty("/enableChange");
-			if (this.validateUser()) {
-				this.getView().getModel("objectView").setProperty("/enableChange", !bEnableChange);
-				
-				if (this.getView().getModel().hasPendingChanges()) {
-this.getView().getModel("objectView").setProperty("/editableForm", bEnableChange);
-					this.openApproveDialog();
-					return;
-				}
-			} else {
-				this.getView().getModel("objectView").setProperty("/editableForm", false);
-				var sMessageTosti18n = this.getView().getModel("i18n").getResourceBundle().getText("messageTostUpdateError");
-				oEvent.getSource().setState(this.validateUser());
-				MessageToast.show(sMessageTosti18n);
+
+			this.getView().getModel("objectView").setProperty("/enableChange", !bEnableChange);
+
+			if (this.getView().getModel().hasPendingChanges()) {
+				this.getView().getModel("objectView").setProperty("/editableForm", bEnableChange);
+				this.openApproveDialog();
+
 			}
 
-		},
-		validateUser: function (oEvent) {
-
-			return this.getView().byId("CreatedByInput").getText() === "LAB1000009";
 		},
 
 		onSelect: function (oEvent) {
@@ -236,8 +233,8 @@ this.getView().getModel("objectView").setProperty("/editableForm", bEnableChange
 		},
 
 		onPressResetChanges: function () {
-			debugger
-			this.getView().getModel("objectView").setProperty("/enableChange", false);
+	
+		
 			this.getView().getModel("objectView").setProperty("/editableForm", false);
 			this.getView().byId("smartForm").setEditable(false);
 			this.getView().getModel().resetChanges();
@@ -252,12 +249,13 @@ this.getView().getModel("objectView").setProperty("/editableForm", bEnableChange
 		openApproveDialog: function () {
 			var dialogSaveButtonText = this.getView().getModel("i18n").getResourceBundle().getText("dialogSaveButtonText");
 			var dialogCancelButtonText = this.getView().getModel("i18n").getResourceBundle().getText("dialogCancelButtonText");
+			var messageSaveChanges=this.getView().getModel("i18n").getResourceBundle().getText("messageSaveChanges");
 			if (!this.oApproveDialog) {
 				this.oApproveDialog = new Dialog({
 					type: DialogType.Message,
 					title: "Confirm",
 					content: new Text({
-						text: "Save changes?"
+						text: messageSaveChanges
 					}),
 					beginButton: new Button({
 						type: ButtonType.Emphasized,
@@ -281,12 +279,12 @@ this.getView().getModel("objectView").setProperty("/editableForm", bEnableChange
 			this.oApproveDialog.open();
 		},
 		handleEditToggle: function (oEven) {
-			debugger
+	
 			var bVisible = this.getView().getModel("objectView").getProperty("/editableForm");
 			this.getView().getModel("objectView").setProperty("/editableForm", !bVisible);
 			this.getView().byId("smartForm").setEditable(!bVisible);
 
-		},
+		}
 
 	});
 
